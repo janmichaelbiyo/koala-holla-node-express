@@ -14,12 +14,25 @@ function getKoalas(){
       console.log('Error getting koalas', error)
       alert('Something bad happened')
     })
+}
 
     function renderKoalas(koalas) {
       console.log('Rendering koalas', koalas)
       let koalaTable = document.getElementById('viewKoalas');
       koalaTable.innerHTML = '';
       for (let bear of koalas) {
+        if (bear.ready_to_transfer === 'N') {
+          koalaTable.innerHTML += `
+          <tr>
+          <td>${bear.id}</td>
+          <td>${bear.name}</td>
+          <td>${bear.gender}</td>
+          <td>${bear.age}</td>
+          <td>${bear.ready_to_transfer} <button onclick="changeReadyStatus(event)">ready</button></td>
+          <td>${bear.notes}</td>
+        </tr>
+        `;
+        } else {
         koalaTable.innerHTML += `
         <tr>
           <td>${bear.id}</td>
@@ -68,9 +81,10 @@ function saveKoala(event){
 
     getKoalas();
   });
-
-  
+}
+function changeReadyStatus(event){
+  const cell = event.target.closest('td');
+  cell.innerHTML='Y';
 }
 
 getKoalas();
-
