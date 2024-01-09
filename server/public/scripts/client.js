@@ -85,6 +85,7 @@ function saveKoala(event){
 function changeReadyStatus(event){
   const cell = event.target.closest('td');
   cell.innerHTML='Y';
+  //this changes the value on the dom but not the data in the array on the server
 }
 
 getKoalas();
