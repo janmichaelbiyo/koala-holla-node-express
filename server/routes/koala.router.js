@@ -71,7 +71,41 @@ router.post('/',(req, res)=>{
 
 // PUT
 
+router.put('/:id' , (req,res) => { 
+    const id = req.params.id; 
+    const koalaData = req.body;
+    const queryKoala = `UPDATE "koalas" SET "ready_to_transfer" = 'Y'  WHERE "id"= $1;`;
+
+
+    pool
+    .query (queryKoala, [id])
+    .then((result) => {
+        res.sendStatus(200);
+    })
+    .catch((error) => {
+        console.log('this is going to go well', error);
+        res.sendStatus(500);
+    });
+});
+
+
 
 // DELETE
+
+router.delete('/:id', (req, res) => {
+    const queryDeleteKoala = `DELETE FROM "koalas" WHERE "id" =${req.params.id}`;
+
+    pool
+        .query(queryDeleteKoala)
+        .then((result) => {
+                res.send(result.rows);
+        })
+        .catch((error) => {
+            console.log('time to get going bud', error);
+
+            res.sendStatus(500);
+        })
+})
+
 
 module.exports = router;

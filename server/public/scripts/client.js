@@ -28,8 +28,9 @@ function getKoalas(){
           <td>${bear.name}</td>
           <td>${bear.gender}</td>
           <td>${bear.age}</td>
-          <td>${bear.ready_to_transfer} <button onclick="changeReadyStatus(event)">ready</button></td>
+          <td>${bear.ready_to_transfer} <button onclick="changeReadyStatus(event)">Ready</button></td>
           <td>${bear.notes}</td>
+          <td><button onclick="deleteKoala(event)">Delete</button></td>
         </tr>
         `;
         } else {
@@ -39,8 +40,9 @@ function getKoalas(){
           <td>${bear.name}</td>
           <td>${bear.gender}</td>
           <td>${bear.age}</td>
-          <td>${bear.ready_to_transfer}</td>
+          <td>${bear.ready_to_transfer}</td> 
           <td>${bear.notes}</td>
+          <td><button onclick="deleteKoala(event)">Delete</button></td>
         </tr>
         `;
       }
@@ -81,11 +83,41 @@ function saveKoala(event){
 
     getKoalas();
   });
-}
+};
+// function changeReadyStatus(event){
+//   const cell = event.target.closest('td');
+//   cell.innerHTML='Y';
+//   //this changes the value on the dom but not the data in the array on the server
+// }
+
 function changeReadyStatus(event){
   const cell = event.target.closest('td');
-  cell.innerHTML='Y';
-  //this changes the value on the dom but not the data in the array on the server
-}
+  const koalaId = cell.parentElement.querySelector('td:first-child').textContent; 
+
+  axios.put(`/koalas/${koalaId}`)
+  .then((response) => {
+    console.log(response.data)
+    getKoalas();
+})
+.catch((error) => {
+  console.log('error updating koala status:', error);
+});
+
+
+};
+function deleteKoala(event){
+  const cell = event.target.closest('tr');
+  const koalaId = cell.querySelector('td:first-child').textContent; // Assuming the ID is in the first column
+
+  axios.delete(`/koalas/${koalaId}/`)
+    .then((response) =>{
+      console.log('Koala deleted successfully:', response.data);
+      getKoalas();
+    })
+    .catch((error) => {
+      console.error('Error deleting koala:', error)
+    });
+  }
+
 
 getKoalas();
